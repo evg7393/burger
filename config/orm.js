@@ -1,94 +1,35 @@
-// Import the MySQL connection object
-var connection = require ('./connection.js');
+var connection = require('./connection.js');
 
-// Helper function for generating MySQL syntax
-function printQuestionMarks(num) {
-	var arr = [];
-
-	for (var i = 0; i < num; i++) {
-		arr.push("?");
-	}
-
-	return arr.toString();
-}
-
-// Helper function for generating My SQL syntax
-function objToSql(ob) {
-	var arr = [];
-
-	for (var key in ob) {
-		arr.push(key + "=" + ob[key]);
-	}
-
-	return arr.toString();
-}
-
-// Create the ORM object to perform SQL queries
+//  object that will store methods -. ALL is a connection query - (will collect all data from the table and the use a coll back to pass the result into the next file system 
+//which will be contained in the models folder), CREATE, UPDATE
 var orm = {
-	// Function that returns all table entries
-	selectAll: function(tableInput, cb) {
-		// Construct the query string that returns all rows from the target table
-		var queryString = "SELECT * FROM " + tableInput + ";";
+    all: function(tableInput, cb){
+        connection.query('SELECT * FROM '+tableInput+';', function(err,
+            result){
+                if(err) throw err;
+                cb(result)
+            })
 
-		// Perform the database query
-		connection.query(queryString, function(err, result) {
-			if (err) {
-				throw err;
-			}
+    },
+    update: function(tableInput, condition, cb){
+        connection.query('UPDATE '+tableInput+' SET devoured=true WHERE id='+condition+';', 
+        function(err, result){
+            if(err)throw err;
+            cb(result);
 
-			// Return results in callback
-			cb(result);
-		});
-	},
+        })
 
-	// Function that insert a single table entry
-	insertOne: function(table, cols, vals, cb) {
-		// Construct the query string that inserts a single row into the target table
-		var queryString = "INSERT INTO " + table;
+    },
 
-		queryString += " (";
-		queryString += cols.toString();
-		queryString += ") ";
-		queryString += "VALUES (";
-		queryString += printQuestionMarks(vals.length);
-		queryString += ") ";
+    create: function(tableInput,val,cb){
+        connection.query('INSERT INTO '+tableInput+"( burger_name) VALUES ('"+val+"');", 
+        function(err,result){
+            if(err)throw err;
+            cb(result);
 
-		// console.log(queryString);
+        })
 
-		// Perform the database query
-		connection.query(queryString, vals, function(err, result) {
-			if (err) {
-				throw err;
-			}
+    }
+}
 
-			// Return results in callback
-			cb(result);
-		});
-	},
-
-	// Function that updates a single table entry
-	updateOne: function(table, objColVals, condition, cb) {
-		// Construct the query string that updates a single entry in the target table
-		var queryString = "UPDATE " + table;
-
-		queryString += " SET ";
-		queryString += objToSql(objColVals);
-		queryString += " WHERE ";
-		queryString += condition;
-
-		// console.log(queryString);
-
-		// Perform the database query
-		connection.query(queryString, function(err, result) {
-			if (err) {
-				throw err;
-			}
-
-			// Return results in callback
-			cb(result);
-		});
-	}
-};
-
-// Export the orm object for use in other modules
 module.exports = orm;
