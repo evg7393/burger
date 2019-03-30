@@ -1,15 +1,26 @@
 {
   "name": "homework-14",
   "version": "1.0.0",
-  "description": "",
+  "description": "Licensing Information: Found on Github\r ---\r Project source can be downloaded from https://github.com/evg7393?tab=repositories\r ----",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
     "mysql": "^2.16.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evg7393/burger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/evg7393/burger/issues"
+  },
+  "homepage": "https://github.com/evg7393/burger#readme"
 }
